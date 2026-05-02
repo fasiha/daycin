@@ -11,11 +11,16 @@ if (window.location.hash.length > 0) {
   }
 }
 
-Cesium.MapboxApi.defaultAccessToken = 'pk.eyJ1IjoiYWxkZWJybiIsImEiOiJjaWk2dXhpZWowMXU4dHdrZmZobDlvMzh2In0.dc7AbJYbRmEXBUWA3lgygQ';
-Cesium.BingMapsApi.defaultKey = 'AtxCXVrmWBEbPPkiEssyaXHct5S9N9-vAJnHEVrV5vVpvDFLsENIXMfu8nekFrZn';
+var models = Cesium.createDefaultImageryProviderViewModels().filter(function(model) {
+  var name = model.name.toLowerCase();
+  return name.indexOf('bing') < 0 && name.indexOf('mapbox') < 0 && name.indexOf('black marble') <
+ 0 && name.indexOf('esri') <
+ 0;
+});
 
 var viewer = new Cesium.Viewer('cesiumContainer', {
-  contextOptions: { webgl: { preserveDrawingBuffer: true } },
+  imageryProviderViewModels : models,
+  selectedImageryProviderViewModel : models[0],  contextOptions: { webgl: { preserveDrawingBuffer: true } },
   animation: false,
   timeline: false,
   terrainExaggeration: savedParametersObj ? +savedParametersObj.terrainExaggeration || 1 : 1
@@ -40,7 +45,7 @@ var tmsProvider = new Cesium.TileMapServiceImageryProvider({
   // west, south, east, north (lower left, upper right)
   rectangle: new Cesium.Rectangle.fromDegrees(-84.8817440,  38.9978410, -83.9707370,  39.8776000)
 });
-var tms = addAdditionalLayerOption('TMS', tmsProvider, 0.9, 1.4);
+var tms = addAdditionalLayerOption('TMS', tmsProvider, 0.7, 1.4);
 
 // Useful
 // The viewModel tracks the state of our mini application.
